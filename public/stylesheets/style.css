@@ -1,0 +1,14 @@
+
+
+.card {
+    margin-left: 10px;
+    width:10em;
+    height: max-content;
+}
+.card-body{
+    height: min-content;
+}
+.card-img-top {
+    width: 6em;
+    height: 7em;
+}
