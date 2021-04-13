@@ -7,7 +7,7 @@ var fileUploader=require('express-fileupload')
 var hbs = require('express-handlebars')
 var userRouter = require('./routes/user');
 var adminRouter = require('./routes/admin');
-
+var db=require('./config/connection')
 
 var app = express();
 
@@ -25,6 +25,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileUploader())
 app.use('/', userRouter);
 app.use('/admin', adminRouter);
+db.connect((err)=>{
+  if(err){
+    console.log('database connection failed'+err);
+  }else{
+    console.log('database connected to 27017');
+  }
+})
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

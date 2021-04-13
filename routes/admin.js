@@ -1,9 +1,10 @@
 var express = require('express');
 var router = express.Router();
-
+var adminHelper = require('../helpers/admin-helper')
 /* GET users listing. */
+let admin = true
 router.get('/', function (req, res, next) {
-  let admin = true
+
 
   let product = [
     {
@@ -43,5 +44,19 @@ router.get('/add-product', (req, res) => {
 router.post('/add-product', (req, res) => {
   console.log(req.body);
   console.log(req.files.image);
+  adminHelper.addProduct(req.body, (id) => {
+    let image = req.files.image
+    image.mv('./public/product-images/' + id + '.jpg', (err) => {
+      if (!err) {
+        res.render('admin/add-product.hbs', { admin })
+      } else {
+        console.log(err);
+      }
+    })
+
+
+
+  })
+
 })
 module.exports = router;
