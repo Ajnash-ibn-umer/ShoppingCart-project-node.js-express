@@ -6,9 +6,9 @@
     height: max-content;
 }
 .card-body{
-    height: min-content;
+    height: 200px;
 }
 .card-img-top {
-    width: 6em;
+    width: 4em;
     height: 7em;
 }

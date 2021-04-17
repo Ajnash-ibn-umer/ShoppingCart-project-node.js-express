@@ -3,17 +3,21 @@ var router = express.Router();
 var adminHelper = require("../helpers/admin-helper");
 
 let admin = true;
-router.get("/", function (req, res, next) {
-  adminHelper.getAllProduct().then((products) => {
-    
-    res.render("admin/admin-panel.hbs", { admin, products });
-    
-  })
 
+router.get("/", function (req, res, next) {
+  let products = adminHelper.getAllProduct().then((products) => {
+    res.render('./admin/admin-panel', { admin, products });
+  })
 });
+
+
+
 router.get("/add-product", (req, res) => {
   res.render("admin/add-product", { admin: true });
 });
+
+
+
 router.post("/add-product", (req, res) => {
   console.log(req.body);
   console.log(req.files.image);
@@ -28,4 +32,6 @@ router.post("/add-product", (req, res) => {
     });
   });
 });
+
+
 module.exports = router;

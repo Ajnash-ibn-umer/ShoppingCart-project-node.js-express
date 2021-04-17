@@ -10,13 +10,11 @@ module.exports = {
         callback(data.ops[0]._id);
       });
   },
-  getAllProduct: () => {
-    
-    return new Promise(async(resolve,reject)=>{
-      let product =await db.get().collection(collections.PROUDCT_COLLECTION).find().toArray(); 
-      resolve(product)
-    })
+  getAllProduct: async() => {
+    let product =await db.get().collection(collections.PROUDCT_COLLECTION).find().toArray(); 
+    return product;
+    }
    
     
-  },
+  
 };
