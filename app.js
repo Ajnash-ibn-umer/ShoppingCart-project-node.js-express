@@ -8,6 +8,9 @@ var hbs = require('express-handlebars')
 var userRouter = require('./routes/user');
 var adminRouter = require('./routes/admin');
 var db=require('./config/connection')
+var session=require('express-session');
+const { Session } = require('inspector');
+
 
 var app = express();
 
@@ -23,8 +26,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileUploader())
+app.use(session({secret:'key',saveUninitialized:true,resave:true,cookie:{maxAge:60000}}));
 app.use('/', userRouter);
 app.use('/admin', adminRouter);
+
 db.connect((err)=>{
   if(err){
     console.log('database connection failed'+err);

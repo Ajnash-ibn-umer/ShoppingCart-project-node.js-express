@@ -23,10 +23,20 @@
     </ul>
     <div class="dropdown">
   <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+ {{#if user}}
+   {{user.name}}
+   {{else}}
    Account
+   {{/if}}
   </button>
   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-    <a class="dropdown-item" href="/login">Login</a>
+    {{#if user}}
+    <a class="dropdown-item" href="/logout">LogOut</a>
+   {{else}}
+   <a class="dropdown-item" href="/login">Login</a>
+   {{/if}}
+    
+   
    
   </div>
 </div>
