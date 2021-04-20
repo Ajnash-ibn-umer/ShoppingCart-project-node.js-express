@@ -1,6 +1,9 @@
 
 <section style="padding: 50px;">
 <h2>login</h2>
+{{#if loginErr}}
+<p class="error text-danger">Invalid Username or Password</p>
+{{/if}}
 <form style="width: 500px;" action="/login" method="POST">
   <div class="form-group" >
     <label for="exampleInputEmail1">Email address</label>

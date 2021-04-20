@@ -5,11 +5,17 @@ var collections = require('../config/collections')
 var adminHelper = require("../helpers/admin-helper");
 const userHelper = require('../helpers/user-helper');
 /* GET home page. */
-
+const verifyLogin=(req,res,next)=>{
+  if(req.session.loggedIn){
+    next()
+  }else{
+    res.redirect('/login')
+  }
+}
 
 router.get('/', function (req, res) {
 let user=req.session.user
-console.log(user);
+//console.log(user);
   let products = adminHelper.getAllProduct().then((products) => {
     res.render('./user/user.hbs', { admin: false, products,user });
   })
@@ -17,7 +23,13 @@ console.log(user);
 });
 
 router.get('/login', (req, res) => {
-  res.render('user/login');
+  if(req.session.loggedIn===true){
+    res.redirect('/')
+  }else{
+    res.render('user/login',{loginErr:req.session.loginErr});
+    req.session.loginErr=false
+  }
+  
 })
 
 router.get('/signup', (req, res) => {
@@ -38,6 +50,7 @@ router.post('/login', (req, res) => {
 
       res.redirect('/')
     } else {
+      req.session.loginErr=true
       res.redirect('/login')
     }
 
@@ -49,6 +62,11 @@ router.post('/login', (req, res) => {
 router.get('/logout',(req,res)=>{
   req.session.destroy()
   res.redirect('/login')
+})
+
+router.get('/cart',verifyLogin,(req,res)=>{
+  let user=req.session.user
+  res.render('user/cart',{user})
 })
 module.exports = router;
 
