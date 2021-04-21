@@ -40,4 +40,26 @@ let proId=req.params.id
    res.redirect('/admin')
  })
 })
+
+
+router.get('/edit-product/:id',(req,res)=>{
+let proId=req.params.id
+adminHelper.getProductDetail(proId).then((product)=>{
+  console.log('get product:'+product);
+
+  res.render('admin/edit-product',{product})
+})
+
+})
+
+router.post('/edit-product/:id',(req,res)=>{
+let proId=req.params.id
+let productDetails=req.body
+adminHelper.updateProduct(proId,productDetails).then((updatedPro)=>{
+  let image = req.files.image;
+  console.log('updated pro:'+updatedPro);
+  image.mv("./public/product-images/" + proId + ".jpg")
+  res.redirect('/admin')
+})
+})
 module.exports = router;

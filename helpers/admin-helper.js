@@ -23,6 +23,29 @@ module.exports = {
        resolve()
       })
      
+    },
+getProductDetail:(proid)=>{
+  return new Promise((resolve,reject)=>{
+    db.get().collection(collections.PROUDCT_COLLECTION).findOne({_id:objectId(proid)}).then((product)=>{
+      console.log("database prdct"+product);
+      resolve(product)
+    })
+  })
+
+},
+    updateProduct:(proid,proDetails)=>{
+      return new Promise((resolve,reject)=>{
+        db.get().collection(collections.PROUDCT_COLLECTION).updateOne({_id:objectId(proid)},{
+          $set:{
+            name:proDetails.name,
+            price:proDetails.price,
+            description:proDetails.description
+
+          }
+        }).then((updatedProduct)=>{
+          resolve(updatedProduct)
+        })
+      })
     }
   
 };

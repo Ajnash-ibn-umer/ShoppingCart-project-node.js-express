@@ -1,0 +1,28 @@
+
+<section>
+    <div class="container mt-5">
+<h3>Edit product</h3>
+
+<form action="/admin/edit-product/{{product._id}}" method="POST" enctype="multipart/form-data">
+  <div class="form-group">
+    <label for="formGroupExampleInput">Product Name</label>
+    <input type="text" class="form-control" id="name" name="name" placeholder="Product name" value="{{product.name}}">
+  </div>
+  <div class="form-group">
+    <label for="formGroupExampleInput2">Price</label>
+    <input type="number" class="form-control" id="number" name="price" placeholder="price" value="{{product.price}}">
+  </div>
+  <div class="form-group">
+    <label for="formGroupExampleInput2">Description</label>
+    <input type="text" class="form-control" id="description" name="description" placeholder="description" value="{{product.description}}">
+  </div>
+  <div class="form-group">
+    <label for="formGroupExampleInput2">Image</label>
+    <img src="/product-images/{{product._id}}.jpg" alt="" style="width: 100px; height: 100px;">
+    <input type="file" class="form-control" id="image" name="image"  placeholder="Upload image">
+  </div>
+
+  <button class="btn btn-primary" type="submit" onclick="return confirm('are you sure Update this Product')">Add Product</button>
+</form>
+    </div>
+</section>
