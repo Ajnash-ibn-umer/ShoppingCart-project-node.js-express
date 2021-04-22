@@ -18,11 +18,18 @@
   </div>
   <div class="form-group">
     <label for="formGroupExampleInput2">Image</label>
-    <img src="/product-images/{{product._id}}.jpg" alt="" style="width: 100px; height: 100px;">
-    <input type="file" class="form-control" id="image" name="image"  placeholder="Upload image">
+    <img src="/product-images/{{product._id}}.jpg" alt="" style="width: 100px; height: 100px;" id="viewImg">
+    <input type="file" class="form-control" id="image" name="image"  placeholder="Upload image" onchange="changeImg(event)">
   </div>
 
   <button class="btn btn-primary" type="submit" onclick="return confirm('are you sure Update this Product')">Add Product</button>
 </form>
     </div>
 </section>
+
+<script>
+  function changeImg(e){
+    console.log('change')
+    document.getElementById('viewImg').src=URL.createObjectURL(e.target.files[0])
+  }
+</script>
