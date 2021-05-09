@@ -3,8 +3,15 @@ const collections = require('../config/collections')
 const bcrypt = require('bcrypt')
 const objectId = require('mongodb').ObjectID
 const util = require('util')
-const { response } = require('express')
-const { CART_COLLECTION } = require('../config/collections')
+const Razorpay=require('razorpay')
+const { resolve } = require('path')
+
+
+var instance = new Razorpay({
+  key_id: 'rzp_test_xTMzE2ppbSJYDl',
+  key_secret: '1YkL0vemtvjIqxBXK5lGhgeP',
+});
+
 module.exports = {
   signupUser: (userData) => {
     return new Promise(async (resolve, reject) => {
@@ -224,22 +231,120 @@ module.exports = {
           },
           {
             $project: {
-              
+
               item: '$products.item',
               quantity: '$products.quantity',
               cartItem: { $arrayElemAt: ['$cartItem', 0] },
             }
-          },{
-            $group:{
-              _id:null,
-              total:{$sum:{$multiply:[{ $toInt: '$quantity' },{ $toInt: '$cartItem.price' }]}}
+          }, {
+            $group: {
+              _id: null,
+              total: { $sum: { $multiply: [{ $toInt: '$quantity' }, { $toInt: '$cartItem.price' }] } }
             }
           }
         ])
         .toArray()
       console.log(util.inspect(cartItems[0], false, null, true))
-     
+
       resolve(cartItems[0].total)
     })
   },
+  getCart: (userId) => {
+    return new Promise(async (resolve, reject) => {
+      let cart = await db
+        .get()
+        .collection(collections.CART_COLLECTION)
+        .findOne({ user: objectId(userId) })
+      console.log('cart' + cart);
+      resolve(cart.products)
+
+    })
+  },
+  addOrder: (userId, products, total, formData) => {
+    return new Promise(async (resolve, reject) => {
+      let status = formData.method === 'cod' ? "Placed" : "pending"
+      let orderObj = {
+        userId: userId,
+        deliveryDetails: {
+          name: formData.name,
+          address: formData.address,
+          mobile: formData.mobile,
+        },
+        status: status,
+        payment_method: formData.method,
+        products: products,
+        date: new Date(),
+        totalAmount: total
+
+      }
+      await db.get().collection(collections.ORDER_COLLECTION).insertOne(orderObj).then(async (response) => {
+        console.log('response: ' + response.ops[0]._id);
+        await db.get().collection(collections.CART_COLLECTION).removeOne({ user: objectId(userId) })
+        let res = {
+          status,
+          orderId: response.ops[0]._id
+        }
+        resolve(res)
+      })
+
+    })
+  },
+  getOrderList: (userId) => {
+    console.log('userId:' + userId);
+    return new Promise(async (resolve, reject) => {
+      let orders=await db.get().collection(collections.ORDER_COLLECTION).find({userId:userId}).toArray()
+console.log(orders[0]);
+      resolve(orders)
+    })
+  },
+
+  razorPay:(orderid,total)=>{
+    return new Promise((resolve,reject)=>{
+      console.log('orderid: '+orderid,'total '+total);
+      var options = {
+        amount: total*100,  // amount in the smallest currency unit
+        currency: "INR",
+        receipt: ''+orderid
+      };
+      instance.orders.create(options, function(err, order) {
+        if(err){
+         
+          console.log('err',err);
+        }else{
+          console.log('Neworder ',order);
+          resolve(order)
+        }
+       
+       
+       
+      });
+    })
+  },
+
+  verifyPayment:(details)=>{
+    return new Promise((resolve,reject)=>{
+      const crypto = require('crypto')
+      let hmac=crypto.createHmac('sha256','1YkL0vemtvjIqxBXK5lGhgeP')
+      hmac.update(details['payment[razorpay_order_id]']+'|'+details['payment[razorpay_payment_id]'])
+      hmac=hmac.digest('hex')
+      if (hmac===details['payment[razorpay_signature]']) {
+        resolve()
+      }else{
+        reject()
+      }
+    })
+  },
+  changeStatus:(orderId)=>{
+    return new Promise(async(resolve,reject)=>{
+await db.get().collection(collections.ORDER_COLLECTION).updateOne({_id:objectId(orderId)},{
+
+  $set:{
+    status:'Placed'
+  }
+})
+resolve()
+    })
+  }
+
+
 }

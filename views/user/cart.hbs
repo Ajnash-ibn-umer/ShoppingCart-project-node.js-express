@@ -35,7 +35,8 @@
             {{cartItem.name}}
           </td>
           <td class="flex-row d-flex">
-            <button class="btn btn-dark" id="minus-btn" onclick="quantityChange('{{this._id}}','{{this.item}}',-1)">
+            
+            <button class="btn btn-dark" id="a{{this.cartItem._id}}" onclick="quantityChange('{{this._id}}','{{this.item}}',-1)">
               -
             </button>
             <p id="{{this.cartItem._id}}">
@@ -58,7 +59,7 @@
       </tbody>
     </table>
     <hr>
-    <p class="mr-4 mt-2 float-right font-weight-bold">Total : 10000</p>
+    <p class="mr-4 mt-2 float-right font-weight-bold">Total : <span id="total">{{total}}</span></p>
     <a href="/cart/place-order" class="mr-4  float-right btn btn-success">Place Order</a>
   </div>
 </section>
