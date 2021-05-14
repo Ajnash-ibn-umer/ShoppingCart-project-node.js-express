@@ -1,0 +1,68 @@
+<section>
+    
+    <div class="container mt-5 p-5">
+        <h3>ORDER SUMMURY</h3> 
+    <hr>
+        <form action="" class="row" id="form-prod-checkout">
+            <div class="order-address col-6 p-3">
+                <div class="form-group">
+                    <label for="name">
+                        Name
+                    </label>
+                    <input type="name" class="form-control" name="name" placeholder="Enter Name" />
+                </div>
+                <div class="form-group">
+                    <label for="address">
+                       Address
+                    </label>
+                    <input type="address" class="form-control" name="address" placeholder="Enter Address" />
+                </div><div class="form-group">
+                    <label for="mobile">
+                        Mobile
+                    </label>
+                    <input type="text" class="form-control" name="mobile" placeholder="Enter Mobile Number" />
+                     <input type="number" class="form-control" id="total" style="display: none;" name="total" value="{{total}}" />
+                      <input type="text" class="form-control" style="display: none;" name="proId" value="{{proId}}" />
+                </div>
+                
+            </div>
+            <div class="order-box col-6 p-5">
+                <h4>
+                    Total Amount is Rs {{total}}
+                </h4>
+                <hr />
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="method" id="cod"
+                        value="cod" checked />
+                    <label class="form-check-label" for="cod">
+                        COD
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="method" id="upi"
+                        value="upi" />
+                    <label class="form-check-label" for="upi">
+                        Online Payment
+                    </label>
+                </div>
+                <button href="" class="btn btn-success float-right" type="submit">CheckOut</button>
+            </div>
+        </form>
+    </div>
+</section>
+<script>
+
+   
+
+</script>
+<style>
+    .order-box{
+        border-style: solid;
+        border-color: black;
+        border-width: 2px;
+        border-radius: 25px;
+     
+        width: max-content;
+        height: max-content;
+    }
+</style>

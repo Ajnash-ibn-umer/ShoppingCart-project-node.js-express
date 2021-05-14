@@ -3,12 +3,12 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var fileUploader=require('express-fileupload')
+var fileUploader = require('express-fileupload')
 var hbs = require('express-handlebars')
 var userRouter = require('./routes/user');
 var adminRouter = require('./routes/admin');
-var db=require('./config/connection')
-var session=require('express-session');
+var db = require('./config/connection')
+var session = require('express-session');
 const { Session } = require('inspector');
 
 
@@ -18,7 +18,7 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 app.engine('hbs', hbs({
-   extname: 'hbs', defaultLayout: 'layout', layoutDir: __dirname + '/views/layouts/', partialsDir: __dirname + '/views/partials'
+  extname: 'hbs', defaultLayout: 'layout', layoutDir: __dirname + '/views/layouts/', partialsDir: __dirname + '/views/partials'
 }))
 app.use(logger('dev'));
 app.use(express.json());
@@ -26,14 +26,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileUploader())
-app.use(session({secret:'key',saveUninitialized:true,resave:true,cookie:{maxAge:60000}}));
+app.use(session({ secret: 'key', saveUninitialized: true, resave: true, cookie: { maxAge: 60000 } }));
 app.use('/', userRouter);
 app.use('/admin', adminRouter);
 
-db.connect((err)=>{
-  if(err){
-    console.log('database connection failed'+err);
-  }else{
+db.connect((err) => {
+  if (err) {
+    console.log('database connection failed' + err);
+  } else {
     console.log('database connected to 27017');
   }
 })

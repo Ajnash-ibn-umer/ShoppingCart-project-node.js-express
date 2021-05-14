@@ -3,8 +3,9 @@
   <div class="container pt-5">
     <div class="row">
       {{#each products}}
-      <div class="col-4 col-md-2 d-flex flex-row flex-container ">
-        <div class="card" style="">
+      <div class="col-md-3 col-6 d-flex flex-row pb-2 ">
+        <a href="/productDetails/{{this._id}}" target="_parent">
+        <div class="card p-2" >
           <img class="card-img-top" src="/product-images/{{this._id}}.jpg" alt="Card image cap" />
           <div class="card-body">
             <h5 class="card-title">
@@ -13,10 +14,11 @@
             <p class="card-text">
              Rs {{this.price}}
             </p>
-            
-            <button class="btn btn-primary" onclick="addToCart('{{this._id}}')">Add To Cart</button>
+             </a>
+            <button class="btn add-toCart" onclick="addToCart('{{this._id}}')">Add To Cart</button>
           </div>
         </div>
+       
       </div>
       {{/each}}
     </div>

@@ -81,27 +81,50 @@ function removeProduct(item, cart) {
 $('#form-checkout').submit((e) => {
     e.preventDefault()
     console.log($('#form-checkout').serialize())
-   
-    
+
+
     $.ajax({
         method: "post",
         url: "/checkout-form",
         data: $('#form-checkout').serialize(),
         dataType: 'json',
         success: function (response) {
-            if (response.status==='Placed') {
+            if (response.status === 'Placed') {
                 console.log(response.orderId);
-                location.href='/checkout'
-                
-            }else if (response.status==='created') {
+                location.href = '/checkout'
+
+            } else if (response.status === 'created') {
                 razorPayment(response)
                 console.log('razor area');
             }
-           
+
         }
     });
 })
-function razorPayment(order){
+$('#form-prod-checkout').submit((e) => {
+    e.preventDefault()
+    console.log($('#form-prod-checkout').serialize())
+
+
+    $.ajax({
+        method: "post",
+        url: "/checkout-product-form",
+        data: $('#form-prod-checkout').serialize(),
+        dataType: 'json',
+        success: function (response) {
+            if (response.status === 'Placed') {
+                console.log(response.orderId);
+                location.href = '/checkout'
+
+            } else if (response.status === 'created') {
+                razorPayment(response)
+                console.log('razor area');
+            }
+
+        }
+    });
+})
+function razorPayment(order) {
     console.log('razorpayment processing');
     var options = {
         "key": "rzp_test_xTMzE2ppbSJYDl", // Enter the Key ID generated from the Dashboard
@@ -111,12 +134,12 @@ function razorPayment(order){
         "description": "Test Transaction",
         "image": "https://example.com/your_logo",
         "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-        "handler": function (response){
+        "handler": function (response) {
             // alert(response.razorpay_payment_id);
             // alert(response.razorpay_order_id);
             // alert(response.razorpay_signature)
 
-            verifyPayment(response,order)
+            verifyPayment(response, order)
         },
         "prefill": {
             "name": "Gaurav Kumar",
@@ -132,7 +155,7 @@ function razorPayment(order){
     };
     var rzp1 = new Razorpay(options);
 
-    rzp1.on('payment.failed', function (response){
+    rzp1.on('payment.failed', function (response) {
         alert(response.error.code);
         alert(response.error.description);
         alert(response.error.source);
@@ -140,12 +163,12 @@ function razorPayment(order){
         alert(response.error.reason);
         alert(response.error.metadata.order_id);
         alert(response.error.metadata.payment_id);
-});
+    });
 
-rzp1.open();
+    rzp1.open();
 }
 
-function verifyPayment(payment,order){
+function verifyPayment(payment, order) {
 
     $.ajax({
         type: "post",
@@ -154,13 +177,18 @@ function verifyPayment(payment,order){
             payment,
             order
         },
-        
+
         success: function (response) {
             if (response.status) {
-                location.href='/checkout'
-            }else{
+                location.href = '/checkout'
+            } else {
                 alert('payment failed')
             }
         }
     });
 }
+$(document).ready(function () {
+    $('#myTable').DataTable();
+});
+
+

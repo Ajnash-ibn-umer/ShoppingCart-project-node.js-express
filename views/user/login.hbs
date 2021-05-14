@@ -1,22 +1,30 @@
+<section style="padding: 50px; " class="login-page">
+  <div class="row ">
+  <div class="form-area col-12 col-md-6  p-5">
+    <h2 class="mb-4">USER login</h2>
+    {{#if loginErr}}
+    <p class="error text-danger">Invalid Username or Password</p>
+    {{/if}}
 
-<section style="padding: 50px;">
-<h2>login</h2>
-{{#if loginErr}}
-<p class="error text-danger">Invalid Username or Password</p>
-{{/if}}
-<form style="width: 500px;" action="/login" method="POST">
-  <div class="form-group" >
-    <label for="exampleInputEmail1">Email address</label>
-    <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-  </div>
-  <div class="form-group">
-    <label for="exampleInputPassword1">Password</label>
-    <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-  </div>
- 
-  <button type="submit" class="btn btn-primary">Submit</button><br>
+    <form class="" action="/login" method="POST">
+      <div class="form-group">
+        <label for="exampleInputEmail1">Email address</label>
+        <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+          placeholder="Enter email">
+        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+      </div>
+      <div class="form-group">
+        <label for="exampleInputPassword1">Password</label>
+        <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+      </div>
 
-  <a href="/signup" class="mt-5">Create an account</a>
-</form>
+      <button type="submit" class="btn">Submit</button><br>
+
+      <a href="/signup" class="mt-5">Create an account</a>
+    </form>
+  </div>
+<div class="col-12 col-md-4 banner-area">
+  <img src="/images/login-banner2.jpg" alt="" class="banner-img">
+</div>
+</div>
 </section>

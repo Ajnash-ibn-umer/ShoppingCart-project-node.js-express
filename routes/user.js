@@ -5,9 +5,9 @@ var collections = require('../config/collections')
 var adminHelper = require("../helpers/admin-helper");
 const userHelper = require('../helpers/user-helper');
 const util = require('util');
-const { assert } = require('console');
-const { response } = require('express');
+
 /* GET home page. */
+
 const verifyLogin = (req, res, next) => {
   if (req.session.loggedIn) {
     next()
@@ -83,14 +83,14 @@ router.get('/cart', verifyLogin, async (req, res) => {
   let userId = req.session.user._id
   let user = req.session.user
   let products = await userHelper.getCartProduct(userId)
-  let total=0
+  let total = 0
   if (products.length) {
-     total = await userHelper.getTotalAmount(userId)
+    total = await userHelper.getTotalAmount(userId)
     res.render('user/cart', { user, products, total })
-  }else{
+  } else {
     res.send('cart is not available')
   }
- 
+
 
 })
 
@@ -189,5 +189,89 @@ router.post('/verifyPayment', (req, res) => {
     })
   })
 })
+
+
+router.get('/profile/:userId', verifyLogin, (req, res) => {
+
+  let user = req.session.user
+  let userId = req.params.userId
+  console.log('user', userId);
+  userHelper.showProfile(userId).then((userDetail) => {
+    res.render('user/profile', { userDetail, user })
+  })
+})
+
+router.get('/editProfile', verifyLogin, (req, res) => {
+  let userid = req.session.user._id
+  let user = req.session.user
+  console.log(userid);
+  userHelper.showProfile(userid).then((userDetail) => {
+    res.render('user/editProfile', { userDetail, user })
+  })
+})
+
+router.post('/editProfile', (req, res) => {
+  let userid = req.session.user._id
+
+
+  userHelper.editProfile(userid, req.body.name).then(() => {
+
+    req.files.image.mv("./public/profileImages/" + userid + ".jpg", function (err) {
+      if (!err) {
+
+        res.redirect('/')
+      } else {
+        console.log('success');
+        res.send('error')
+      }
+    })
+
+
+  })
+})
+
+router.get('/productDetails/:proId', verifyLogin, (req, res) => {
+  let user = req.session.user
+  let proId = req.params.proId
+  adminHelper.getProductDetail(proId).then((product) => {
+
+    res.render('user/productDetails', { product, user })
+  })
+
+})
+
+router.get('/placeOrder', (req, res) => {
+  let user = req.session.user
+  let total = req.query.total
+  let proId = req.query.proId
+  res.render('user/place-product', { user, total, proId })
+})
+
+router.post('/checkout-product-form', async (req, res) => {
+  let userId = req.session.user._id
+  let proId = await req.body.proId
+  let products = await adminHelper.getProductDetail(proId)
+  let total = req.body.total
+
+  console.log('total: ', total, 'proid', proId);
+  await userHelper.addOrder(userId, products, total, req.body).then(async (response) => {
+    console.log(req.body);
+    console.log('res:' + response);
+    if (response.status === 'Placed') {
+      res.json(response)
+    } else if (response.status === 'pending') {
+      await userHelper.razorPay(response.orderId, total).then((response) => {
+        console.log('Res :' + response.status);
+        res.json(response)
+      })
+
+    }
+
+
+  })
+
+
+})
+
 module.exports = router;
 

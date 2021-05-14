@@ -1,0 +1,24 @@
+<section>
+    <div class="container profile-container pt-5">
+
+        <div class="details p-3">
+            <form action="/editProfile" method="POST" enctype="multipart/form-data">
+                <img src="/profileImages/{{userDetail._id}}.jpg" class="profileImg" alt="">
+                <input type="file" id="image" name="image" >
+                <div class="area pt-3">
+
+
+                    <div class="form-group">
+                        <h6>Name: <br></h6>
+                        <input type="text" class="form-control" name="name" value="{{userDetail.name}}">
+
+                    </div>
+                </div>
+<button type="submit" class="btn mt-2"> Save</button>
+            </form>
+
+
+        </div>
+
+    </div>
+</section>
